@@ -139,13 +139,11 @@ int check_words(FILE* fp, hashmap_t hashtable[], char * misspelled[])
 	ssize_t line_size;
 	char * word;
 	int i;
-	char * new_word;
 	
 
 	//Loop through file until the end
-	while(!feof(fp))
+	while(getline(&line, &len, fp) != -1)
 	{
-		line_size = getline(&line, &len, fp);
 		//printf("%s\n", line);
 		word = strtok(line, " ,.!?\n");
 		//printf("%s\n", word);
@@ -169,5 +167,5 @@ int check_words(FILE* fp, hashmap_t hashtable[], char * misspelled[])
 	line = NULL;
 	fclose(fp);
 
-	return num_misspelled - 1;
+	return num_misspelled;
 }

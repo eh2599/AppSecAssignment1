@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 	if (success)
 	{
 		printf("\nDictionary successfully loaded\n");
-		FILE * fp = fopen("testing_uppercase.txt", "r");
+		FILE * fp = fopen("test1.txt", "r");
 		if (fp == NULL)
 		{	
 			printf("Could not open test file\n");	
