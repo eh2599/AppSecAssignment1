@@ -169,5 +169,5 @@ int check_words(FILE* fp, hashmap_t hashtable[], char * misspelled[])
 	line = NULL;
 	fclose(fp);
 
-	return num_misspelled;
+	return num_misspelled - 1;
 }
