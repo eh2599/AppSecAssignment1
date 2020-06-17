@@ -11,12 +11,12 @@ int main(int argc, char **argv)
 	printf("\nLoading dictionary\n");
 
 	//load dictionary into hashmap
-	bool success = load_dictionary("wordlist.txt", hashtable);
+	bool success = load_dictionary(argv[2], hashtable);
 
 	if (success)
 	{
 		printf("\nDictionary successfully loaded\n");
-		FILE * fp = fopen("test1.txt", "r");
+		FILE * fp = fopen(argv[1], "r");
 		if (fp == NULL)
 		{	
 			printf("Could not open test file\n");	
