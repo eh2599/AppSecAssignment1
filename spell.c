@@ -59,11 +59,6 @@ bool check_word(const char* word, hashmap_t hashtable[])
 	
 	char * lwrcase_word;
 
-	/***for(int i = 0; i < strlen(word); i++)
-	{
-		lwrcase_word[i] = tolower(word[i]);
-	}***/
-
 	lwrcase_word = strlwr(word);
 
 	bucket = hash_function(lwrcase_word);
@@ -119,13 +114,7 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[])
 	}
 	//Close dictionary file	
 	fclose(dict_file);
-	/***for(i = 0; i < 20; i++)
-	{
-		if (hashtable[i] != NULL)
-		{
-			printf("%s\n", hashtable[i]->word);
-		}
-	}***/
+	
 
 	return true;
 
@@ -141,22 +130,25 @@ int check_words(FILE* fp, hashmap_t hashtable[], char * misspelled[])
 	int i;
 	
 
-	//Loop through file until the end
+	//Loop through line by line until the end of file
 	while(getline(&line, &len, fp) != -1)
 	{
-		//printf("%s\n", line);
+		//Split line by spaces and punctuation
 		word = strtok(line, " ,.!?\n");
-		//printf("%s\n", word);
 		while(word != NULL)
 		{
 			//new_word = remove_punctuation(word);
 			//printf("Successfully removed punctuation from %s\n", word);
+			
+			//Check to see if the word is in the dictionary			
 			if (!check_word(word, hashtable))
 			{
 				printf("%s\n", word);
-				word = misspelled[num_misspelled];
+				//Add misspelled word to the array
+				misspelled[num_misspelled] = word;
 				num_misspelled++;
 			}
+			//Get next word from line
 			word = strtok(NULL, " ,.!?\n");
 			
 		}
