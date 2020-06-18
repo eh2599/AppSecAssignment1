@@ -56,7 +56,8 @@ bool check_word(const char* word, hashmap_t hashtable[])
 		cursor = cursor->next;
 	}
 	
-	char * lwrcase_word = strdup(word);
+	char * lwrcase_word;
+	lwrcase_word =  strdup(word);
 
 	unsigned char *p = (unsigned char *)lwrcase_word;
 	while(*p)
@@ -76,7 +77,8 @@ bool check_word(const char* word, hashmap_t hashtable[])
 		}
 		cursor = cursor->next;
 	}
-	free(lwrcase_word);
+	free(cursor);
+	free((char*) lwrcase_word);
 	return false;
 }
 
@@ -116,6 +118,7 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[])
 			new_node->next = hashtable[bucket];
 			hashtable[bucket] = new_node;
 		}
+		free(new_node);
 	}
 	//Close dictionary file	
 	fclose(dict_file);
@@ -139,7 +142,7 @@ int check_words(FILE* fp, hashmap_t hashtable[], char * misspelled[])
 	while(getline(&line, &len, fp) != -1)
 	{
 		//Split line by spaces and punctuation
-		word = strtok(line, " ,.!?\n");
+		word = strtok(line, " ,.!?\"\n");
 		while(word != NULL)
 		{
 			//new_word = remove_punctuation(word);
@@ -154,7 +157,7 @@ int check_words(FILE* fp, hashmap_t hashtable[], char * misspelled[])
 				num_misspelled++;
 			}
 			//Get next word from line
-			word = strtok(NULL, " ,.!?\n");
+			word = strtok(NULL, " ,.!?\"\n");
 			
 		}
 		line = NULL;

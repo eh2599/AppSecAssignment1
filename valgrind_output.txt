@@ -1,0 +1,71 @@
+$ valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --track-origins=yes ./spell_check test1.txt wordlist.txt | tee valgrind_output.txt
+==3871== Memcheck, a memory error detector
+==3871== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==3871== Using Valgrind-3.11.0 and LibVEX; rerun with -h for copyright info
+==3871== Command: ./spell_check test1.txt wordlist.txt
+==3871== 
+==3871== Conditional jump or move depends on uninitialised value(s)
+==3871==    at 0x4EA89C5: getdelim (iogetdelim.c:59)
+==3871==    by 0x400FA3: check_words (spell.c:139)
+==3871==    by 0x400AAA: main (main.c:26)
+==3871==  Uninitialised value was created by a stack allocation
+==3871==    at 0x400EDB: check_words (spell.c:129)
+==3871== 
+
+Loading dictionary
+
+Dictionary successfully loaded
+
+ Checking for misspelled words
+sogn
+skyn
+betta
+Number of misspelled words: 3
+==3871== 
+==3871== FILE DESCRIPTORS: 3 open at exit.
+==3871== Open file descriptor 2: /dev/pts/17
+==3871==    <inherited from parent>
+==3871== 
+==3871== Open file descriptor 1:
+==3871==    <inherited from parent>
+==3871== 
+==3871== Open file descriptor 0: /dev/pts/17
+==3871==    <inherited from parent>
+==3871== 
+==3871== 
+==3871== HEAP SUMMARY:
+==3871==     in use at exit: 6,895,470 bytes in 123,134 blocks
+==3871==   total heap usage: 123,143 allocs, 9 frees, 6,908,998 bytes allocated
+==3871== 
+==3871== 14 bytes in 2 blocks are definitely lost in loss record 1 of 4
+==3871==    at 0x4C2DB8F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3871==    by 0x4EC5489: strdup (strdup.c:42)
+==3871==    by 0x400C63: check_word (spell.c:59)
+==3871==    by 0x400F38: check_words (spell.c:149)
+==3871==    by 0x400AAA: main (main.c:26)
+==3871== 
+==3871== 120 bytes in 1 blocks are possibly lost in loss record 2 of 4
+==3871==    at 0x4C2DB8F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3871==    by 0x4EA89E7: getdelim (iogetdelim.c:62)
+==3871==    by 0x400FA3: check_words (spell.c:139)
+==3871==    by 0x400AAA: main (main.c:26)
+==3871== 
+==3871== 6,789,776 bytes in 121,246 blocks are indirectly lost in loss record 3 of 4
+==3871==    at 0x4C2DB8F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3871==    by 0x400DAF: load_dictionary (spell.c:106)
+==3871==    by 0x400A26: main (main.c:14)
+==3871== 
+==3871== 6,895,336 (105,560 direct, 6,789,776 indirect) bytes in 1,885 blocks are definitely lost in loss record 4 of 4
+==3871==    at 0x4C2DB8F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3871==    by 0x400DAF: load_dictionary (spell.c:106)
+==3871==    by 0x400A26: main (main.c:14)
+==3871== 
+==3871== LEAK SUMMARY:
+==3871==    definitely lost: 105,574 bytes in 1,887 blocks
+==3871==    indirectly lost: 6,789,776 bytes in 121,246 blocks
+==3871==      possibly lost: 120 bytes in 1 blocks
+==3871==    still reachable: 0 bytes in 0 blocks
+==3871==         suppressed: 0 bytes in 0 blocks
+==3871== 
+==3871== For counts of detected and suppressed errors, rerun with: -v
+==3871== ERROR SUMMARY: 4 errors from 4 contexts (suppressed: 0 from 0)
