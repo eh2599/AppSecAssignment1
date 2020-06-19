@@ -112,7 +112,6 @@ int check_words(FILE* fp, hashmap_t hashtable[], char * misspelled[])
 			//Check to see if the word is in the dictionary			
 			if (!check_word(word, hashtable))
 			{
-				printf("%s\n", word);
 				//Add misspelled word to the array
 				misspelled[num_misspelled] = word;
 				num_misspelled++;
