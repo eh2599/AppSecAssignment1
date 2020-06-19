@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "dictionary.h"
 
+
 int main(int argc, char **argv)
 {
 	//create hashmap to hold dictionary words

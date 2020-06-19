@@ -6,41 +6,6 @@
 #include <ctype.h>
 
 
-char * remove_punctuation(char * word)
-{
-	char * word_without_punctuation;
-	int i = 0;
-	int j = 0;
-	while(! isalpha(word[i]))
-	{
-		i++;
-	}
-	while(i < strlen(word))
-	{
-		word_without_punctuation[j] = word[i];
-		i++;
-		j++;
-	}
-	i = strlen(word);
-	while (! isalpha(word[i]) && i > 0)
-	{
-		word[i] = '\0';
-		i--;
-	}
-	return word_without_punctuation;
-}
-
-/***char strlwr(const char *str)
-{
-	char lwrcase_str[strlen(str)];
-	int i;
-	for (i = 0; i < strlen(str); i++)
-	{
-		lwrcase_str[i] = tolower(str[i]);
-	}
-	return lwrcase_str;
-}***/
-
 bool check_word(const char* word, hashmap_t hashtable[])
 {
 	int bucket;
@@ -56,8 +21,8 @@ bool check_word(const char* word, hashmap_t hashtable[])
 		cursor = cursor->next;
 	}
 	
-	char * lwrcase_word;
-	lwrcase_word =  strdup(word);
+	
+	char * lwrcase_word = strdup(word);
 
 	unsigned char *p = (unsigned char *)lwrcase_word;
 	while(*p)
@@ -77,8 +42,6 @@ bool check_word(const char* word, hashmap_t hashtable[])
 		}
 		cursor = cursor->next;
 	}
-	free(cursor);
-	free((char*) lwrcase_word);
 	return false;
 }
 
@@ -102,6 +65,7 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[])
 
 	char word[1024];
 	int bucket;
+	
 	//Add words from file to hashtable
 	while (fscanf (dict_file, "%1023s", word) == 1)
 	{
@@ -118,7 +82,6 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[])
 			new_node->next = hashtable[bucket];
 			hashtable[bucket] = new_node;
 		}
-		free(new_node);
 	}
 	//Close dictionary file	
 	fclose(dict_file);
@@ -145,8 +108,6 @@ int check_words(FILE* fp, hashmap_t hashtable[], char * misspelled[])
 		word = strtok(line, " ,.!?\"\n");
 		while(word != NULL)
 		{
-			//new_word = remove_punctuation(word);
-			//printf("Successfully removed punctuation from %s\n", word);
 			
 			//Check to see if the word is in the dictionary			
 			if (!check_word(word, hashtable))
