@@ -5,16 +5,41 @@
 #include <stdio.h>
 #include <ctype.h>
 
-
 bool check_word(const char* word, hashmap_t hashtable[])
 {
+	//Remove Punctuation from end
+	int i,j;
+	char * str = strdup(word);
+	bool is_digit = true;
+	for(i = strlen(str)-1; !isalpha(str[i]) && !isdigit(str[i]); i--)
+	{
+		str[i] = '\0';
+	}
+	char *str2;
+	for(str2 = str; ispunct(*str2); ++str2);
+	strcpy(str, str2);
+
+	for(i = 0; i < strlen(str); i++)
+	{
+		if(!isdigit(str[i]))
+		{
+			is_digit = false;
+			break;
+		}
+	}
+
+	if (is_digit == true)
+	{
+		return true;
+	}
+
 	int bucket;
-	bucket = hash_function(word);
+	bucket = hash_function(str);
 	hashmap_t cursor = hashtable[bucket];
 
 	while (cursor != NULL)
 	{
-		if (strcmp(word, cursor->word) == 0)
+		if (strcmp(str, cursor->word) == 0)
 		{
 			return true;
 		}
@@ -22,7 +47,7 @@ bool check_word(const char* word, hashmap_t hashtable[])
 	}
 	
 	
-	char * lwrcase_word = strdup(word);
+	char * lwrcase_word = strdup(str);
 
 	unsigned char *p = (unsigned char *)lwrcase_word;
 	while(*p)
@@ -98,26 +123,38 @@ int check_words(FILE* fp, hashmap_t hashtable[], char * misspelled[])
 	size_t len = 0;
 	ssize_t line_size;
 	char * word;
-	int i;
+	int i,j;
+	char * str;
 	
 
 	//Loop through line by line until the end of file
 	while(getline(&line, &len, fp) != -1)
 	{
 		//Split line by spaces and punctuation
-		word = strtok(line, " ,.!?\"\n");
+		word = strtok(line, " \n");
 		while(word != NULL)
 		{
+
+			//Remove punctuation
+			str = strdup(word);
+			for(i = strlen(str)-1; !isalpha(str[i]) && !isdigit(str[i]); i--)
+			{
+				str[i] = '\0';
+			}
+			char *str2;
+			for(str2 = str; ispunct(*str2); ++str2);
+			strcpy(str, str2);
 			
 			//Check to see if the word is in the dictionary			
-			if (!check_word(word, hashtable))
+			if (!check_word(str, hashtable))
 			{
 				//Add misspelled word to the array
-				misspelled[num_misspelled] = word;
+				misspelled[num_misspelled] = str;
 				num_misspelled++;
+				printf("%s\n", str);
 			}
 			//Get next word from line
-			word = strtok(NULL, " ,.!?\"\n");
+			word = strtok(NULL, " \n");
 			
 		}
 		line = NULL;
